@@ -1,7 +1,8 @@
 import pandas as pd
 
 df=pd.read_csv("lista_de_precios.csv")
-
+df2=pd.read_csv("inventa.csv")
+"""
 def agregar_ainventario():
     agregar=input("agrega; en este orden\n->'Modelo'<-\t->'Color'<-\t'Tallas(separadas por espacios)'\n")
     lista =agregar.split()
@@ -23,7 +24,7 @@ def agregar_ainventario():
     diccionario_resultado['color']=color
     print(diccionario_resultado)
 
-def busqueda():
+def busquedas():
     global ubicaciones 
     ubicaciones = []
     search = input("introduzca el modelo a buscar\n-->")
@@ -52,7 +53,29 @@ def cambio():
         if fin ==1550:
             fin = 1700
         
-        df.loc[i, "Precio"]= fin
+    "?    df.loc[i, "Precio"]= fin
 
     print(df["Precio"])
     df.to_csv("Precios.csv")
+"""
+class venta:
+    def __init__(self, modelo, color, talla, precio):
+        self.model=modelo
+        self.colo=color
+        self.talla=talla
+        self.total=precio
+    def decrementacion(self):
+        for i in range(len(df2["Modelo"])):
+            if self.model == df2.loc[i,"Modelo"]:
+                df2.loc[i, self.talla]-=1
+        print(df2)
+    def ganancia(self):
+        for i in range(len(df["Modelo"])):
+            if self.model == df.loc[i,"Modelo"]:
+                costo =self.total- df.loc[i, "Precio"]
+                #cosoto=self.total-costo
+        print("usted tiene una ganancia de: --> ", costo)
+
+dia = venta("Canelo", "NEGRO", "XL", 1500)
+dia.decrementacion()
+dia.ganancia()
