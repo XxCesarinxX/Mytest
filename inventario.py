@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 df=pd.read_csv("lista_de_precios.csv")
 df2=pd.read_csv("inventa.csv")
@@ -54,17 +55,19 @@ def cambio():
         if fin ==1550:
             fin = 1700
         
-    "?    df.loc[i, "Precio"]= fin
+    df.loc[i, "Precio"]= fin
 
     print(df["Precio"])
     df.to_csv("Precios.csv")
 """
 class venta:
-    def __init__(self, modelo, color, talla, precio):
+    def __init__(self, modelo, color, talla, precio,cliente,contacto):
         self.model=modelo
         self.colo=color
         self.talla=talla
         self.total=precio
+        self.cli=cliente
+        self.contact=contacto
         self.canti=1
 
     def decrementacion(self):
@@ -72,30 +75,48 @@ class venta:
             if self.model == df2.loc[i,"Modelo"]:
                 df2.loc[i, self.talla]-=1
         print(df2)
-    def ganancia(self):
-        for i in range(len(df["Modelo"])):
-            if self.model == df.loc[i,"Modelo"]:
-                global costo, ganar
-                costo = df.loc[i, "Precio"]
-                ganar =  self.total - costo
-                #cosoto=self.total-costo
-        print("usted tiene una ganancia de: --> ",ganar)
     def adjuntar(self):
-        ven=vent.append({'Cantidad':self.canti,'Modelo':self.model, 'Color':self.colo,'Talla':self.talla, 'Ganancia':ganar,'Total':self.total, 'Precio':costo}, ignore_index=True)
-        print(ven)
-        ven.to_csv("ventas.csv", index=False)
-    def reponer(self):
+        xd=False
         for i in range(len(vent["Modelo"])):
-            if self.model == vent.loc[i,"Modelo"]:
-                print('mismo modelo')
-                if self.colo == vent.loc[i,"Color"]:
-                    print('mismo color')
-                    if self.talla == vent.loc[i,"Talla"]:
-                        print('mismo talla')
+            if self.model==vent.loc[i,"Modelo"]:
+                if self.colo==vent.loc[i,"Color"]:
+                    if self.talla==vent.loc[i,"Talla"]:
                         vent.loc[i,"Cantidad"]+=1
-            
-        print(vent)
-            
+                        vent.to_csv("ventas.csv", index=False)
+                        #print("Se aumento uno")
+                        xd=True
+        if xd==False:
+            #print("se concatena")
+            diccionario_adjuntar={
+                "Cantidad":self.canti,
+                "Modelo":self.model,
+                "Color":self.colo,
+                "Talla":self.talla,
+                "Total":self.total 
+            }
+            dfdiic=pd.DataFrame(diccionario_adjuntar, index=[0])
+            save=pd.concat([vent,dfdiic])
+            save.to_csv("ventas.csv", index=False)
+        
+    def reponer(self):
+        vent=pd.read_csv("ventas.csv")  
+        can=list(vent["Cantidad"])
+        mod=list(vent["Modelo"])
+        color=list(vent["Color"])
+        tal=list(vent["Talla"])
+        dicc={
+            "Cantidad":can,
+            "Modelo":mod,
+            "Color":color,
+            "Talla":tal
+        }
+        dfdiic=pd.DataFrame(dicc)
+        print(dfdiic)
+    
+    def ticket(self):
+        day=datetime.today().strftime("%A, %B %d, %Y")
 
-dia = venta("Canelo", "NEGRO", "XL", 1500)
-dia.reponer()
+dia = venta("Italiano", "NEGRO", "XL", 1500,"Brandom","5545314510")
+#dia.adjuntar()
+#dia.reponer()
+dia.ticket()
